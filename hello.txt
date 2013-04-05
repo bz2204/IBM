@@ -1,2 +1,5 @@
-Bohong Zhao bz2204@columbia.edu
-Xu Tan xt2136@columbia.edu
+我简单地写了一个框架，无论是什么样子的学习算法，只需要有胶水代码就应该可以工作了。
+
+如果有什么意见联系我。
+
+谭叙
