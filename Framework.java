@@ -12,16 +12,16 @@ interface IFeatureC {
 
 class Candidate {
 	String content;
-	Vector<IFeatureC> features;
+	ArrayList<IFeatureC> features;
 	
-	public double hashCode() {
+	public int hashCode() {
 		return content.hashCode();
 	}
 }
 
 class Question {
 	String content;
-	Vector<IFeatureQ> features;
+	ArrayList<IFeatureQ> features;
 }
 
 class Sample {
