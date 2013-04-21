@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="AnswerRanking" default="build" basedir=".">
+	<property name="dest" value="classes" />
+	<property name="src" value="src" />
+	
+	<target name="init">
+		<mkdir dir="${dest}" />
+		<echo>Make output directory...</echo>
+	</target>
+
+	<target name="build" depends="init">
+		<javac includeantruntime="false" srcdir="${src}" destdir="${dest}"
+		    classpath="src:classes:weka.jar"/>
+	</target>
+	
+	<target name="run" depends="build">
+	    <java classname="Main" classpath="${dest}:weka.jar" />
+	</target>
+	
+	<target name="clean">
+		<delete dir="${dest}" />
+	</target>
+</project>
