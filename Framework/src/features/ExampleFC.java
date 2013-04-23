@@ -3,20 +3,21 @@ package features;
 import framework.*;
 
 public class ExampleFC implements IFeatureC {
-    private int id;
+    private static String description = "ExampleFC";
 
     private double value;
     
-    public ExampleFC(int id, String c) {
-        this.id = id;
+    public ExampleFC(String c) {
         this.value = Double.parseDouble(c);
     }
     
-    public int getID() {
-        return id;
+    public String getDescription() {
+        return description;
     }
     
-    public double getValue() {
-        return value;
+    public double[] getValues() {
+        double[] ret = new double[1];
+        ret[0] = value;
+        return ret;
     }
 }

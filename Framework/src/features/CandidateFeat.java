@@ -8,7 +8,7 @@ public class CandidateFeat {
     public static ArrayList<IFeatureC> getFeatures(String content) {
         ArrayList<IFeatureC> list = new ArrayList<IFeatureC>();
         
-        list.add(new ExampleFC(list.size(), content));
+        list.add(new ExampleFC(content));
         
         return list;
     }

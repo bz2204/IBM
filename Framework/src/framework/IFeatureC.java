@@ -1,6 +1,6 @@
 package framework;
 
 public interface IFeatureC {
-	public int getID();
-	public double getValue();
+	public String getDescription();
+	public double[] getValues();
 }

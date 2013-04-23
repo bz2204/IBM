@@ -19,11 +19,14 @@ public class WekaGlue implements ILearningAlg {
         FastVector attr = new FastVector();
         int max = 0;
         for (IFeatureQ q : samples.iterator().next().question.features) {
-            max = q.getID() > max ? q.getID() : max;
-            attr.addElement(new Attribute(new Integer(q.getID()).toString()));
+            int index = 0;
+            for (double value : q.getValues())
+                attr.addElement(new Attribute(q.getDescription() + "_" + (index++)));
         }
-        for (IFeatureC c : samples.iterator().next().scores.keySet().iterator().next().features)
-            attr.addElement(new Attribute(new Integer(c.getID() + max + 1).toString()));
+        for (IFeatureC c : samples.iterator().next().scores.keySet().iterator().next().features) {
+            int index = 0;
+            attr.addElement(new Attribute(c.getDescription() + "_" + (index++)));
+        }
         attr.addElement(new Attribute("score"));
 
         instances = new Instances("Samples", attr, samples.size());
@@ -32,16 +35,18 @@ public class WekaGlue implements ILearningAlg {
                 Instance inst = new Instance(attr.size());
                 int index = 0;
                 for (IFeatureQ q : s.question.features)
-                    if (q.getValue() != Double.NaN)
-                        inst.setValue(instances.attribute(index++), q.getValue());
-                    else
-                        inst.setMissing(instances.attribute(index++));
+                    for (double value : q.getValues())
+                        if (value != Double.NaN)
+                            inst.setValue(instances.attribute(index++), value);
+                        else
+                            inst.setMissing(instances.attribute(index++));
                 
                 for (IFeatureC c : entry.getKey().features)
-                    if (c.getValue() != Double.NaN)
-                        inst.setValue(instances.attribute(index++), c.getValue());
-                    else
-                        inst.setMissing(instances.attribute(index++));
+                    for (double value : c.getValues())
+                        if (value != Double.NaN)
+                            inst.setValue(instances.attribute(index++), value);
+                        else
+                            inst.setMissing(instances.attribute(index++));
                 
                 inst.setValue(instances.attribute(index), entry.getValue());
                 
@@ -57,16 +62,18 @@ public class WekaGlue implements ILearningAlg {
         Instance inst = new Instance(instances.numAttributes());
         int index = 0;
         for (IFeatureQ fq : q.features)
-            if (fq.getValue() != Double.NaN)
-                inst.setValue(instances.attribute(index++), fq.getValue());
-            else
-                inst.setMissing(instances.attribute(index++));
+            for (double value : fq.getValues())
+                if (value != Double.NaN)
+                    inst.setValue(instances.attribute(index++), value);
+                else
+                    inst.setMissing(instances.attribute(index++));
         
         for (IFeatureC fc : c.features)
-            if (fc.getValue() != Double.NaN)
-                inst.setValue(instances.attribute(index++), fc.getValue());
-            else
-                inst.setMissing(instances.attribute(index++));
+            for (double value : fc.getValues())
+                if (value != Double.NaN)
+                    inst.setValue(instances.attribute(index++), value);
+                else
+                    inst.setMissing(instances.attribute(index++));
         inst.setMissing(instances.attribute(index));
         
         return classifier.classifyInstance(inst);
