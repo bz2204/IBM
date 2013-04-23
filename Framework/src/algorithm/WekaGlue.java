@@ -7,6 +7,18 @@ import java.util.*;
 import weka.core.*;
 import weka.classifiers.*;
 
+class UpdateNotSupportedException extends Exception {
+    private String classifier;
+    
+    UpdateNotSupportedException(String c) {
+        classifier = c;
+    }
+    
+    public String toString() {
+        return "Update operation is not supported by " + classifier;
+    }
+}
+
 public class WekaGlue implements ILearningAlg {
     Classifier classifier;
     Instances instances;
@@ -15,9 +27,8 @@ public class WekaGlue implements ILearningAlg {
         classifier = c;
     }
     
-    public void train(Collection<Sample> samples) throws Exception{
+    public void train(Collection<Sample> samples) throws Exception {
         FastVector attr = new FastVector();
-        int max = 0;
         for (IFeatureQ q : samples.iterator().next().question.features) {
             int index = 0;
             for (double value : q.getValues())
@@ -77,5 +88,58 @@ public class WekaGlue implements ILearningAlg {
         inst.setMissing(instances.attribute(index));
         
         return classifier.classifyInstance(inst);
+    }
+    
+    public void update(Question q, Candidate c, double score) throws Exception {
+        if (classifier instanceof UpdateableClassifier) {
+            UpdateableClassifier uc = (UpdateableClassifier)classifier;
+            
+            if (instances == null) {
+                FastVector v = new FastVector();
+                for (IFeatureQ fq : q.features) {
+                    int index = 0;
+                    for (double value : fq.getValues()) {
+                        Attribute attr = new Attribute(fq.getDescription() + "_" + index);
+                        v.addElement(attr);
+                    }
+                }
+                
+                for (IFeatureC fc : c.features) {
+                    int index = 0;
+                    for (double value : fc.getValues()) {
+                        Attribute attr = new Attribute(fc.getDescription() + "_" + index);
+                        v.addElement(attr);
+                    }
+                }
+                
+                v.addElement(new Attribute("score"));
+                instances = new Instances("Samples", v, 100);
+                
+                instances.setClassIndex(instances.numAttributes() - 1);
+            }
+            
+            Instance inst = new Instance(instances.numAttributes());
+            int index = 0;
+            for (IFeatureQ fq : q.features)
+                for (double value : fq.getValues())
+                    if (value != Double.NaN)
+                        inst.setValue(instances.attribute(index++), value);
+                    else
+                        inst.setMissing(instances.attribute(index++));
+            
+            for (IFeatureC fc : c.features)
+                for (double value : fc.getValues())
+                    if (value != Double.NaN)
+                        inst.setValue(instances.attribute(index++), value);
+                    else
+                        inst.setMissing(instances.attribute(index++));
+            inst.setValue(instances.attribute(index), score);
+            instances.add(inst);
+            inst.setDataset(instances);
+
+            uc.updateClassifier(inst);
+        } else {
+            throw new UpdateNotSupportedException(classifier.toString());
+        }
     }
 }

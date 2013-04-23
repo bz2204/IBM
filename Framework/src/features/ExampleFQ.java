@@ -16,9 +16,8 @@ public class ExampleFQ implements IFeatureQ {
     }
     
     public double[] getValues() {
-        double[] ret = new double[2];
+        double[] ret = new double[1];
         ret[0] = value;
-        ret[1] = -value;
         return ret;
     }
 }

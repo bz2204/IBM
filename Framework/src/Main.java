@@ -5,6 +5,7 @@ import features.*;
 import java.util.*;
 
 import weka.classifiers.functions.*;
+import weka.classifiers.rules.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -15,7 +16,7 @@ public class Main {
             Question q = new Question(Integer.toString(i));
             Sample s = new Sample(q);
             for (j = -10; j < 10; ++j) {
-                Candidate c = new Candidate(Integer.toString(j));
+                Candidate c = new Candidate(Integer.toString(j), q);
                 s.scores.put(c, (double)i + j);
             }
             samples.add(s);
@@ -25,7 +26,7 @@ public class Main {
         alg.train(samples);
         
         Question q = new Question("0.5");
-        Candidate c = new Candidate("0.7");
+        Candidate c = new Candidate("0.7", q);
         System.out.println(alg.predict(q, c));
     }
 }

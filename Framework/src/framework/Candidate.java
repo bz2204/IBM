@@ -8,9 +8,13 @@ public class Candidate {
 	public String content;
 	public ArrayList<IFeatureC> features;
 	
-	public Candidate(String content) {
+	public Question q;
+	
+	public Candidate(String content, Question question) {
 	    this.content = content;
-	    features = CandidateFeat.getFeatures(content);
+	    q = question;
+
+	    features = CandidateFeat.getFeatures(content, q);
 	}
 	
 	public int hashCode() {
