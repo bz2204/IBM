@@ -2,7 +2,8 @@
 <project name="AnswerRanking" default="build" basedir=".">
 	<property name="dest" value="classes" />
 	<property name="src" value="src" />
-	
+	<property name="classpath" value="${src}:${dest}:weka.jar:json.jar" />
+
 	<target name="init">
 		<mkdir dir="${dest}" />
 		<echo>Make output directory...</echo>
@@ -10,11 +11,11 @@
 
 	<target name="build" depends="init">
 		<javac includeantruntime="false" srcdir="${src}" destdir="${dest}"
-		    classpath="src:classes:weka.jar"/>
+		    classpath="${classpath}"/>
 	</target>
 	
 	<target name="run" depends="build">
-	    <java classname="Main" classpath="${dest}:weka.jar" />
+	    <java classname="Main" classpath="${classpath}" />
 	</target>
 	
 	<target name="clean">
