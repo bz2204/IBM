@@ -10,25 +10,29 @@ public class GQueryFeature implements IFeatureC {
     
     private Thread t;
     
-    public GQueryFeature(String q, String c) throws Exception {
-        gqc = new GQueryCount(q, c);
-        gqc.setStart(0);
+    public GQueryFeature(String q, String c) {
+        try {
+            gqc = new GQueryCount(q, c);
+            gqc.setStart(0);
         
-        t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    synchronized(gqc) {
-                        gqc.query();
+            t = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        synchronized(gqc) {
+                            gqc.query();
                         
-                        gqc.notify();
+                            gqc.notify();
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
                 }
-            }
-        });
-        t.start();
+            });
+            t.start();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public String getDescription() {

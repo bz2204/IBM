@@ -36,7 +36,8 @@ public class WekaGlue implements ILearningAlg {
         }
         for (IFeatureC c : samples.iterator().next().scores.keySet().iterator().next().features) {
             int index = 0;
-            attr.addElement(new Attribute(c.getDescription() + "_" + (index++)));
+            for (double value : c.getValues())
+                attr.addElement(new Attribute(c.getDescription() + "_" + (index++)));
         }
         attr.addElement(new Attribute("score"));
 

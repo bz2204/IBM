@@ -10,7 +10,7 @@
 	</target>
 
 	<target name="build" depends="init">
-		<javac includeantruntime="false" srcdir="${src}" destdir="${dest}"
+		<javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${src}" destdir="${dest}"
 		    classpath="${classpath}"/>
 	</target>
 	
